@@ -1,0 +1,137 @@
+-- Get the Player and PlayerGui
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local chat = game:GetService("Chat")
+
+-- Create the main ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playerGui
+
+-- Initialize variables
+local autoMultiplying = false
+
+-- Function to play the initial looping sound
+local function playInitialSound()
+    local initialSound = Instance.new("Sound")
+    initialSound.SoundId = "rbxassetid://138088905" -- Initial music ID
+    initialSound.Parent = playerGui
+    initialSound.Volume = 1
+    initialSound.Looped = true -- Loop the sound indefinitely
+    initialSound:Play()
+end
+
+-- Function to play the new sound
+local function playNewSound()
+    local newSound = Instance.new("Sound")
+    newSound.SoundId = "rbxassetid://142376088" -- New music ID
+    newSound.Parent = playerGui
+    newSound.Volume = 1
+    newSound:Play() -- Play the new sound immediately
+end
+
+-- Function to send a message in chat
+local function sendChatMessage()
+    while autoMultiplying do
+        chat:Chat(player.Character.Head, "EAT YOUR TACOS🌮🌮🌮🌮🌮🌮🌮🌮🌮🌮🌮🌮", Enum.ChatColor.Red)
+        wait(3) -- Send the message every 3 seconds
+    end
+end
+
+-- Function to create the "You are an idiot" box
+local function createIdiotBox()
+    -- Create the main frame for the box
+    local boxFrame = Instance.new("Frame")
+    boxFrame.Size = UDim2.new(0, 200, 0, 100)
+    boxFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    boxFrame.BorderSizePixel = 1
+    boxFrame.Parent = screenGui
+    
+    -- Randomly position the box
+    boxFrame.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    
+    -- Create the "You are an idiot" text label
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 0.8, 0)
+    textLabel.Position = UDim2.new(0, 0, 0, 0)
+    textLabel.Text = "You are an idiot!"
+    textLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Parent = boxFrame
+
+    -- Create the close button (red X)
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0.2, 0, 0.2, 0)
+    closeButton.Position = UDim2.new(0.8, 0, 0, 0)
+    closeButton.Text = "X"
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    closeButton.Parent = boxFrame
+
+    -- Function to handle the close button click
+    local function onCloseButtonClick()
+        -- This function is no longer needed as we are automatically starting the process
+    end
+    
+    closeButton.MouseButton1Click:Connect(onCloseButtonClick)
+end
+
+-- Function to start auto multiplying and adding text and emojis
+local function startAutoMultiplying()
+    autoMultiplying = true
+    
+    -- Play the new sound immediately
+    playNewSound()
+    
+    -- Create semi-transparent ScreenGui overlay
+    local overlay = Instance.new("Frame")
+    overlay.Size = UDim2.new(1, 0, 1, 0)
+    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    overlay.BackgroundTransparency = 0.8
+    overlay.Parent = screenGui
+
+    -- Function to change color
+    spawn(function()
+        while autoMultiplying do
+            overlay.BackgroundColor3 = Color3.fromRGB(math.random(0, 255), math.random(0, 255), math.random(0, 255))
+            wait(0.2) -- Adjust color change speed
+        end
+    end)
+
+    -- Start spamming 🌮 emoji and adding text labels
+    spawn(function()
+        while autoMultiplying do
+            wait(0.05) -- Fast emoji spamming
+            
+            -- Add 🌮 emoji label
+            local tacoLabel = Instance.new("TextLabel")
+            tacoLabel.Size = UDim2.new(math.random(0.05, 0.15), 0, math.random(0.05, 0.15), 0) -- Random size
+            tacoLabel.Position = UDim2.new(math.random(), 0, math.random(), 0)
+            tacoLabel.Text = "🌮"
+            tacoLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+            tacoLabel.BackgroundTransparency = 1
+            tacoLabel.Parent = screenGui
+
+            -- Add "EAT YOUR TACOS" text label
+            local eatTacosLabel = Instance.new("TextLabel")
+            eatTacosLabel.Size = UDim2.new(0.4, 0, 0.1, 0)
+            eatTacosLabel.Position = UDim2.new(math.random(), 0, math.random(), 0)
+            eatTacosLabel.Text = "EAT YOUR TACOS 🌮🌮🌮🌮"
+            eatTacosLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            eatTacosLabel.BackgroundTransparency = 1
+            eatTacosLabel.Parent = screenGui
+        end
+    end)
+
+    -- Start sending chat messages
+    spawn(sendChatMessage)
+end
+
+-- Wait 4 seconds before starting all actions
+wait(4)
+
+-- Play the initial sound and create the initial "You are an idiot" box
+playInitialSound()
+createIdiotBox()
+
+-- Start the auto-multiplying effects
+startAutoMultiplying()
